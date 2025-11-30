@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import { Product } from "./ProductCard";
 import { differenceInDays, format } from "date-fns";
-import { de } from "date-fns/locale";
+import { supabase } from "@/integrations/supabase/client";
 
 interface RentalFormProps {
   product: Product | null;
@@ -65,19 +65,51 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
       return;
     }
 
+    if (!product) return;
+
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const { error } = await supabase.from("rental_requests").insert({
+        product_id: product.id,
+        product_name: product.name,
+        start_date: startDate,
+        end_date: endDate,
+        days: totalDays,
+        total_price: totalPrice,
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        email: email,
+        privacy_accepted: privacyAccepted,
+        status: "pending",
+      });
 
-    toast({
-      title: "Vielen Dank!",
-      description:
-        "Wir bearbeiten Ihre Anfrage und melden uns in Kürze bei Ihnen.",
-    });
-
-    setIsSubmitting(false);
-    onClose();
+      if (error) {
+        console.error("Error submitting rental request:", error);
+        toast({
+          title: "Fehler",
+          description: "Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Vielen Dank!",
+          description:
+            "Wir bearbeiten Ihre Anfrage und melden uns in Kürze bei Ihnen.",
+        });
+        onClose();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Fehler",
+        description: "Ein unerwarteter Fehler ist aufgetreten.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!product) return null;

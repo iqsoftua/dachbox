@@ -3,42 +3,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard, { Product } from "@/components/ProductCard";
 import RentalForm from "@/components/RentalForm";
-import { ArrowDown, Shield, Truck, Clock } from "lucide-react";
+import { ArrowDown, Shield, Truck, Clock, Loader2 } from "lucide-react";
+import { useProducts } from "@/hooks/useProducts";
 
 import heroBanner from "@/assets/hero-banner.jpg";
-import thuleMotionXTL from "@/assets/thule-motion-xt-l.jpg";
-import thuleMotionXTXL from "@/assets/thule-motion-xt-xl.jpg";
-import thuleMotionXTXXL from "@/assets/thule-motion-xt-xxl.jpg";
-
-const products: Product[] = [
-  {
-    id: "thule-motion-xt-l",
-    name: "Thule Motion XT L",
-    volume: "450 Liter",
-    dimensions: "215 × 91,5 × 44 cm",
-    maxLoad: "75 kg",
-    pricePerDay: 12,
-    image: thuleMotionXTL,
-  },
-  {
-    id: "thule-motion-xt-xl",
-    name: "Thule Motion XT XL",
-    volume: "500 Liter",
-    dimensions: "215 × 91,5 × 46,5 cm",
-    maxLoad: "75 kg",
-    pricePerDay: 15,
-    image: thuleMotionXTXL,
-  },
-  {
-    id: "thule-motion-xt-xxl",
-    name: "Thule Motion XT XXL",
-    volume: "610 Liter",
-    dimensions: "232 × 95 × 47 cm",
-    maxLoad: "75 kg",
-    pricePerDay: 18,
-    image: thuleMotionXTXXL,
-  },
-];
 
 const features = [
   {
@@ -60,6 +28,7 @@ const features = [
 
 const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const { products, isLoading, error } = useProducts();
 
   const handleProductSelect = (product: Product) => {
     setSelectedProduct(product);
@@ -141,20 +110,30 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {products.map((product, index) => (
-                <div
-                  key={product.id}
-                  className="animate-slide-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <ProductCard
-                    product={product}
-                    onSelect={handleProductSelect}
-                  />
-                </div>
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="mt-12 flex justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : error ? (
+              <div className="mt-12 text-center text-muted-foreground">
+                {error}
+              </div>
+            ) : (
+              <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {products.map((product, index) => (
+                  <div
+                    key={product.id}
+                    className="animate-slide-up"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <ProductCard
+                      product={product}
+                      onSelect={handleProductSelect}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
