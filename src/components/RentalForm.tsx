@@ -235,7 +235,7 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
-              placeholder="+49 123 456 7890"
+              placeholder="+49 171 8177236"
             />
           </div>
 

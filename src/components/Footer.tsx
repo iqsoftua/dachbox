@@ -10,10 +10,7 @@ const Footer = () => {
           <div>
             <Link to="/" className="flex items-center gap-2">
               <span className="font-display text-xl font-bold tracking-tight">
-                DACHBOX
-              </span>
-              <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Vermietung
+                IQTechBox
               </span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
@@ -62,7 +59,10 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h3 className="mb-4 font-semibold">Kontakt</h3>
-            <div className="flex flex-col gap-3">
+            <p className="text-sm font-medium text-foreground">
+              IQTechBox – Denys Makarenko
+            </p>
+            <div className="mt-2 flex flex-col gap-3">
               <a
                 href="mailto:nktkiev@gmail.com"
                 className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -71,15 +71,15 @@ const Footer = () => {
                 nktkiev@gmail.com
               </a>
               <a
-                href="tel:+491234567890"
+                href="tel:+491718177236"
                 className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 <Phone className="h-4 w-4" />
-                +49 123 456 7890
+                +49 171 8177236
               </a>
               <span className="flex items-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                Berlin, Deutschland
+                Demmeringstraße 74, 04177 Leipzig
               </span>
             </div>
           </div>
@@ -87,7 +87,7 @@ const Footer = () => {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 md:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} DACHBOX Vermietung. Alle Rechte
+            © {new Date().getFullYear()} IQTechBox. Alle Rechte
             vorbehalten.
           </p>
           <Link

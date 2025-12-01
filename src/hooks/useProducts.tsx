@@ -8,6 +8,10 @@ import thuleMotionXTXL from "@/assets/thule-motion-xt-xl.jpg";
 import thuleMotionXTXXL from "@/assets/thule-motion-xt-xxl.jpg";
 
 const imageMap: Record<string, string> = {
+  "thule-motion-m": thuleMotionXTL,
+  "thule-motion-l": thuleMotionXTXL,
+  "thule-motion-xxl": thuleMotionXTXXL,
+  // Legacy slugs for backward compatibility
   "thule-motion-xt-l": thuleMotionXTL,
   "thule-motion-xt-xl": thuleMotionXTXL,
   "thule-motion-xt-xxl": thuleMotionXTXXL,

@@ -23,10 +23,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <span className="font-display text-xl font-bold tracking-tight md:text-2xl">
-              DACHBOX
-            </span>
-            <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-              Vermietung
+              IQTechBox
             </span>
           </Link>
 

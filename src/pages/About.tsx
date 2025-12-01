@@ -7,8 +7,8 @@ const About = () => {
     "Hochwertige Thule Dachboxen",
     "Einfache Online-Buchung",
     "Flexible Mietzeiten",
-    "Vollkasko-Versicherung inklusive",
-    "Persönliche Beratung",
+    "TÜV-zertifizierte Ausrüstung",
+    "Kostenlose Montage",
     "Faire Preise",
   ];
 
@@ -66,7 +66,7 @@ const About = () => {
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-3xl">
               <h2 className="font-display text-3xl font-semibold tracking-tight">
-                Warum DACHBOX Vermietung?
+                Warum IQTechBox?
               </h2>
               <div className="mt-8 grid gap-4 md:grid-cols-2">
                 {benefits.map((benefit) => (

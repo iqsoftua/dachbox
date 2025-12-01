@@ -11,13 +11,13 @@ import heroBanner from "@/assets/hero-banner.jpg";
 const features = [
   {
     icon: Shield,
-    title: "Versichert",
-    description: "Vollkasko-Schutz inklusive",
+    title: "Sicherheit",
+    description: "Nur TÜV-zertifizierte Ausrüstung.",
   },
   {
     icon: Truck,
-    title: "Lieferung möglich",
-    description: "Direkt zu Ihnen nach Hause",
+    title: "Montage",
+    description: "Kostenloser Aufbau und Abbau der Dachbox.",
   },
   {
     icon: Clock,
