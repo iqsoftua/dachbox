@@ -2,19 +2,15 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Product } from "@/components/ProductCard";
 
-// Import local images as fallback
-import thuleMotionXTL from "@/assets/thule-motion-xt-l.jpg";
-import thuleMotionXTXL from "@/assets/thule-motion-xt-xl.jpg";
-import thuleMotionXTXXL from "@/assets/thule-motion-xt-xxl.jpg";
+// Import local images
+import thuleMotionM from "@/assets/thule-motion-m.png";
+import thuleMotionL from "@/assets/thule-motion-l.png";
+import thuleMotionXXL from "@/assets/thule-motion-xxl.png";
 
 const imageMap: Record<string, string> = {
-  "thule-motion-m": thuleMotionXTL,
-  "thule-motion-l": thuleMotionXTXL,
-  "thule-motion-xxl": thuleMotionXTXXL,
-  // Legacy slugs for backward compatibility
-  "thule-motion-xt-l": thuleMotionXTL,
-  "thule-motion-xt-xl": thuleMotionXTXL,
-  "thule-motion-xt-xxl": thuleMotionXTXXL,
+  "thule-motion-m": thuleMotionM,
+  "thule-motion-l": thuleMotionL,
+  "thule-motion-xxl": thuleMotionXXL,
 };
 
 export const useProducts = () => {
@@ -51,7 +47,7 @@ export const useProducts = () => {
           dimensions: p.dimensions,
           maxLoad: p.max_load,
           pricePerDay: Number(p.price_per_day),
-          image: imageMap[p.slug] || p.image_url || thuleMotionXTL,
+          image: imageMap[p.slug] || p.image_url || thuleMotionM,
         }));
         setProducts(mappedProducts);
       }
