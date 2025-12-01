@@ -30,13 +30,15 @@ const Privacy = () => {
                 Verantwortlich für die Datenverarbeitung auf dieser Website ist:
               </p>
               <p className="text-muted-foreground">
-                DACHBOX Vermietung
+                IQTechBox – Denys Makarenko
                 <br />
-                Musterstraße 123
+                Demmeringstraße 74
                 <br />
-                10115 Berlin
+                04177 Leipzig
                 <br />
                 E-Mail: nktkiev@gmail.com
+                <br />
+                Telefon: +49 171 8177236
               </p>
 
               <h2 className="mt-8 font-display text-2xl font-semibold">

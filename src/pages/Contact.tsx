@@ -64,7 +64,11 @@ const Contact = () => {
                   Sie uns eine E-Mail oder nutzen Sie das Kontaktformular.
                 </p>
 
-                <div className="mt-8 space-y-6">
+                <p className="mt-4 text-sm font-medium text-foreground">
+                  IQTechBox – Denys Makarenko
+                </p>
+
+                <div className="mt-6 space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
                       <Mail className="h-5 w-5" />
@@ -87,10 +91,10 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold">Telefon</h3>
                       <a
-                        href="tel:+491234567890"
+                        href="tel:+491718177236"
                         className="text-muted-foreground transition-colors hover:text-foreground"
                       >
-                        +49 123 456 7890
+                        +49 171 8177236
                       </a>
                     </div>
                   </div>
@@ -102,9 +106,9 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold">Adresse</h3>
                       <p className="text-muted-foreground">
-                        Musterstraße 123
+                        Demmeringstraße 74
                         <br />
-                        10115 Berlin
+                        04177 Leipzig
                         <br />
                         Deutschland
                       </p>
