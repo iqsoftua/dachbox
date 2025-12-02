@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -18,18 +19,40 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const { error } = await supabase.from("contact_messages").insert({
+        name,
+        email,
+        message,
+        status: "new",
+      });
 
-    toast({
-      title: "Nachricht gesendet!",
-      description: "Wir melden uns so schnell wie möglich bei Ihnen.",
-    });
-
-    setName("");
-    setEmail("");
-    setMessage("");
-    setIsSubmitting(false);
+      if (error) {
+        console.error("Error submitting contact message:", error);
+        toast({
+          title: "Fehler",
+          description: "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Nachricht gesendet!",
+          description: "Wir melden uns so schnell wie möglich bei Ihnen.",
+        });
+        setName("");
+        setEmail("");
+        setMessage("");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Fehler",
+        description: "Ein unerwarteter Fehler ist aufgetreten.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
