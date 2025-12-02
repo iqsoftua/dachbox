@@ -35,6 +35,16 @@ const Contact = () => {
           variant: "destructive",
         });
       } else {
+        // Send email notification
+        supabase.functions.invoke("send-notification", {
+          body: {
+            type: "contact",
+            name,
+            email,
+            message,
+          },
+        }).catch(err => console.error("Email notification error:", err));
+
         toast({
           title: "Nachricht gesendet!",
           description: "Wir melden uns so schnell wie möglich bei Ihnen.",
