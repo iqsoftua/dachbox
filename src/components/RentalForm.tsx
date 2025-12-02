@@ -93,6 +93,22 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
           variant: "destructive",
         });
       } else {
+        // Send email notification
+        supabase.functions.invoke("send-notification", {
+          body: {
+            type: "rental",
+            firstName,
+            lastName,
+            email,
+            phone,
+            productName: product.name,
+            startDate,
+            endDate,
+            days: totalDays,
+            totalPrice,
+          },
+        }).catch(err => console.error("Email notification error:", err));
+
         toast({
           title: "Vielen Dank!",
           description:
