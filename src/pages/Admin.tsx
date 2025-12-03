@@ -334,12 +334,14 @@ const RequestCard = ({ request, onStatusChange }: RequestCardProps) => {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold">{request.first_name} {request.last_name}</h3>
+            <h3 className="font-semibold">{request.product_name}</h3>
             <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusColors[request.status] || statusColors.pending}`}>
               {statusLabels[request.status] || request.status}
             </span>
           </div>
-          <p className="text-sm text-muted-foreground">{request.product_name}</p>
+          <p className="text-sm text-muted-foreground">
+            {format(new Date(request.start_date), "dd.MM.yyyy", { locale: de })} - {format(new Date(request.end_date), "dd.MM.yyyy", { locale: de })}
+          </p>
         </div>
         <div className="text-right">
           <p className="font-bold">{request.total_price}€</p>
@@ -347,22 +349,10 @@ const RequestCard = ({ request, onStatusChange }: RequestCardProps) => {
         </div>
       </div>
       
-      <div className="mt-4 grid gap-2 text-sm md:grid-cols-2">
-        <div>
-          <span className="text-muted-foreground">Zeitraum: </span>
-          {format(new Date(request.start_date), "dd.MM.yyyy", { locale: de })} - {format(new Date(request.end_date), "dd.MM.yyyy", { locale: de })}
-        </div>
+      <div className="mt-4 flex items-center justify-between text-sm">
         <div>
           <span className="text-muted-foreground">Erstellt: </span>
           {format(new Date(request.created_at), "dd.MM.yyyy HH:mm", { locale: de })}
-        </div>
-        <div>
-          <span className="text-muted-foreground">E-Mail: </span>
-          <a href={`mailto:${request.email}`} className="underline">{request.email}</a>
-        </div>
-        <div>
-          <span className="text-muted-foreground">Telefon: </span>
-          <a href={`tel:${request.phone}`} className="underline">{request.phone}</a>
         </div>
       </div>
 
