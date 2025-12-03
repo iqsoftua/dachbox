@@ -36,14 +36,19 @@ const Contact = () => {
         });
       } else {
         // Send email notification
-        supabase.functions.invoke("send-notification", {
-          body: {
-            type: "contact",
-            name,
-            email,
-            message,
-          },
-        }).catch(err => console.error("Email notification error:", err));
+        try {
+          const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
+            body: {
+              type: "contact",
+              name,
+              email,
+              message,
+            },
+          });
+          console.log("Email notification response:", data, fnError);
+        } catch (err) {
+          console.error("Email notification error:", err);
+        }
 
         toast({
           title: "Nachricht gesendet!",

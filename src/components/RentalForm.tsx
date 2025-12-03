@@ -94,20 +94,25 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
         });
       } else {
         // Send email notification
-        supabase.functions.invoke("send-notification", {
-          body: {
-            type: "rental",
-            firstName,
-            lastName,
-            email,
-            phone,
-            productName: product.name,
-            startDate,
-            endDate,
-            days: totalDays,
-            totalPrice,
-          },
-        }).catch(err => console.error("Email notification error:", err));
+        try {
+          const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
+            body: {
+              type: "rental",
+              firstName,
+              lastName,
+              email,
+              phone,
+              productName: product.name,
+              startDate,
+              endDate,
+              days: totalDays,
+              totalPrice,
+            },
+          });
+          console.log("Email notification response:", data, fnError);
+        } catch (err) {
+          console.error("Email notification error:", err);
+        }
 
         toast({
           title: "Vielen Dank!",
