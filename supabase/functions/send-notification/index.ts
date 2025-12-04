@@ -67,7 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const emailResponse = await resend.emails.send({
-      from: "Dachbox Anfragen <onboarding@resend.dev>",
+      from: "Dachbox Anfragen <anfragen@iqtechbox.de>",
       to: ["dachbox@iqtechbox.de"],
       subject,
       html,
