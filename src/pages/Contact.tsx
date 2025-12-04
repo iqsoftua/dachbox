@@ -17,15 +17,18 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("=== CONTACT FORM SUBMIT START ===");
     setIsSubmitting(true);
 
     try {
+      console.log("Inserting contact message...", { name, email, message });
       const { error } = await supabase.from("contact_messages").insert({
         name,
         email,
         message,
         status: "new",
       });
+      console.log("Insert result, error:", error);
 
       if (error) {
         console.error("Error submitting contact message:", error);
@@ -36,6 +39,7 @@ const Contact = () => {
         });
       } else {
         // Send email notification
+        console.log("Calling send-notification edge function...");
         try {
           const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
             body: {
@@ -45,7 +49,7 @@ const Contact = () => {
               message,
             },
           });
-          console.log("Email notification response:", data, fnError);
+          console.log("=== EMAIL RESULT ===", { data, fnError });
         } catch (err) {
           console.error("Email notification error:", err);
         }
