@@ -94,6 +94,7 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
         });
       } else {
         // Send email notification
+        console.log("=== CALLING SEND-NOTIFICATION ===");
         try {
           const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
             body: {
@@ -109,7 +110,7 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
               totalPrice,
             },
           });
-          console.log("Email notification response:", data, fnError);
+          console.log("=== EMAIL RESULT ===", { data, fnError });
         } catch (err) {
           console.error("Email notification error:", err);
         }
