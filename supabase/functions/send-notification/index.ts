@@ -68,7 +68,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailResponse = await resend.emails.send({
       from: "Dachbox Anfragen <onboarding@resend.dev>",
-      to: ["dachbox@iqtechbox.de"],
+      to: ["nktkiev@gmail.com"], // Временно, пока домен iqtechbox.de не верифицирован в Resend
       subject,
       html,
     });
