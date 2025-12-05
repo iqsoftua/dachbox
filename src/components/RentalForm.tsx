@@ -94,25 +94,35 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
         });
       } else {
         // Send email notification
-        console.log("=== CALLING SEND-NOTIFICATION ===");
+        console.log("=== RENTAL INSERT SUCCESS, CALLING EDGE FUNCTION ===");
+        alert("Daten gespeichert! Edge function wird aufgerufen...");
         try {
+          const notificationData = {
+            type: "rental" as const,
+            firstName,
+            lastName,
+            email,
+            phone,
+            productName: product.name,
+            startDate,
+            endDate,
+            days: totalDays,
+            totalPrice,
+          };
+          console.log("Calling send-notification with:", notificationData);
           const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
-            body: {
-              type: "rental",
-              firstName,
-              lastName,
-              email,
-              phone,
-              productName: product.name,
-              startDate,
-              endDate,
-              days: totalDays,
-              totalPrice,
-            },
+            body: notificationData,
           });
           console.log("=== EMAIL RESULT ===", { data, fnError });
-        } catch (err) {
+          if (fnError) {
+            console.error("Edge function error:", fnError);
+            alert("Edge function Fehler: " + JSON.stringify(fnError));
+          } else {
+            alert("Email erfolgreich gesendet! ID: " + JSON.stringify(data));
+          }
+        } catch (err: any) {
           console.error("Email notification error:", err);
+          alert("Catch Error: " + (err?.message || err));
         }
 
         toast({
