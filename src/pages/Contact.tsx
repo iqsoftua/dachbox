@@ -39,19 +39,29 @@ const Contact = () => {
         });
       } else {
         // Send email notification
-        console.log("Calling send-notification edge function...");
+        console.log("=== CONTACT INSERT SUCCESS, CALLING EDGE FUNCTION ===");
+        alert("Kontakt gespeichert! Edge function wird aufgerufen...");
         try {
+          const notificationData = {
+            type: "contact" as const,
+            name,
+            email,
+            message,
+          };
+          console.log("Calling send-notification with:", notificationData);
           const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
-            body: {
-              type: "contact",
-              name,
-              email,
-              message,
-            },
+            body: notificationData,
           });
           console.log("=== EMAIL RESULT ===", { data, fnError });
-        } catch (err) {
+          if (fnError) {
+            console.error("Edge function error:", fnError);
+            alert("Edge function Fehler: " + JSON.stringify(fnError));
+          } else {
+            alert("Email erfolgreich gesendet! ID: " + JSON.stringify(data));
+          }
+        } catch (err: any) {
           console.error("Email notification error:", err);
+          alert("Catch Error: " + (err?.message || err));
         }
 
         toast({
