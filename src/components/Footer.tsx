@@ -10,7 +10,7 @@ const Footer = () => {
           <div>
             <Link to="/" className="flex items-center gap-2">
               <span className="font-display text-xl font-bold tracking-tight">
-                IQTechBox
+                Dachbox-Vermietung Leipzig
               </span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
@@ -60,7 +60,7 @@ const Footer = () => {
           <div>
             <h3 className="mb-4 font-semibold">Kontakt</h3>
             <p className="text-sm font-medium text-foreground">
-              IQTechBox – Denys Makarenko
+              Dachbox-Vermietung Leipzig – Denys Makarenko
             </p>
             <div className="mt-2 flex flex-col gap-3">
               <a
@@ -87,7 +87,7 @@ const Footer = () => {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 md:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} IQTechBox. Alle Rechte
+            © {new Date().getFullYear()} Dachbox-Vermietung Leipzig. Alle Rechte
             vorbehalten.
           </p>
           <Link
