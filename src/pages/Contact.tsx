@@ -17,10 +17,12 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    alert("FORM SUBMITTED! Name: " + name);
     console.log("=== CONTACT FORM SUBMIT START ===");
     setIsSubmitting(true);
 
     try {
+      alert("Trying to insert into database...");
       console.log("Inserting contact message...", { name, email, message });
       const { error } = await supabase.from("contact_messages").insert({
         name,
