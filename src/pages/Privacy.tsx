@@ -30,7 +30,7 @@ const Privacy = () => {
                 Verantwortlich für die Datenverarbeitung auf dieser Website ist:
               </p>
               <p className="text-muted-foreground">
-                IQTechBox – Denys Makarenko
+                Dachbox-Vermietung Leipzig – Denys Makarenko
                 <br />
                 Demmeringstraße 74
                 <br />

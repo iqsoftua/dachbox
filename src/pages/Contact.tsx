@@ -15,65 +15,58 @@ const Contact = () => {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    alert("FORM SUBMITTED! Name: " + name);
-    console.log("=== CONTACT FORM SUBMIT START ===");
+  const handleSubmit = async () => {
+    if (!name || !email || !message) {
+      toast({
+        title: "Fehler",
+        description: "Bitte füllen Sie alle Felder aus.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      alert("Trying to insert into database...");
-      console.log("Inserting contact message...", { name, email, message });
+      // Save to database
       const { error } = await supabase.from("contact_messages").insert({
         name,
         email,
         message,
         status: "new",
       });
-      console.log("Insert result, error:", error);
 
       if (error) {
         console.error("Error submitting contact message:", error);
         toast({
           title: "Fehler",
-          description: "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+          description: "Ihre Nachricht konnte nicht gesendet werden.",
           variant: "destructive",
         });
-      } else {
-        // Send email notification
-        console.log("=== CONTACT INSERT SUCCESS, CALLING EDGE FUNCTION ===");
-        alert("Kontakt gespeichert! Edge function wird aufgerufen...");
-        try {
-          const notificationData = {
-            type: "contact" as const,
-            name,
-            email,
-            message,
-          };
-          console.log("Calling send-notification with:", notificationData);
-          const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
-            body: notificationData,
-          });
-          console.log("=== EMAIL RESULT ===", { data, fnError });
-          if (fnError) {
-            console.error("Edge function error:", fnError);
-            alert("Edge function Fehler: " + JSON.stringify(fnError));
-          } else {
-            alert("Email erfolgreich gesendet! ID: " + JSON.stringify(data));
-          }
-        } catch (err: any) {
-          console.error("Email notification error:", err);
-          alert("Catch Error: " + (err?.message || err));
-        }
-
-        toast({
-          title: "Nachricht gesendet!",
-          description: "Wir melden uns so schnell wie möglich bei Ihnen.",
-        });
-        setName("");
-        setEmail("");
-        setMessage("");
+        return;
       }
+
+      // Send email notification
+      const { error: fnError } = await supabase.functions.invoke("send-notification", {
+        body: {
+          type: "contact",
+          name,
+          email,
+          message,
+        },
+      });
+
+      if (fnError) {
+        console.error("Email notification error:", fnError);
+      }
+
+      toast({
+        title: "Nachricht gesendet!",
+        description: "Wir melden uns so schnell wie möglich bei Ihnen.",
+      });
+      setName("");
+      setEmail("");
+      setMessage("");
     } catch (error) {
       console.error("Error:", error);
       toast({
@@ -119,7 +112,7 @@ const Contact = () => {
                 </p>
 
                 <p className="mt-4 text-sm font-medium text-foreground">
-                  IQTechBox – Denys Makarenko
+                  Dachbox-Vermietung Leipzig – Denys Makarenko
                 </p>
 
                 <div className="mt-6 space-y-6">
@@ -189,7 +182,7 @@ const Contact = () => {
                   Füllen Sie das Formular aus und wir melden uns bei Ihnen.
                 </p>
 
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <div className="mt-6 space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
                     <Input
@@ -197,7 +190,6 @@ const Contact = () => {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      required
                       placeholder="Ihr Name"
                     />
                   </div>
@@ -209,7 +201,6 @@ const Contact = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      required
                       placeholder="ihre@email.de"
                     />
                   </div>
@@ -220,13 +211,12 @@ const Contact = () => {
                       id="message"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      required
                       placeholder="Ihre Nachricht..."
                       rows={5}
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  <Button onClick={handleSubmit} className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -236,7 +226,7 @@ const Contact = () => {
                       "Nachricht senden"
                     )}
                   </Button>
-                </form>
+                </div>
               </div>
             </div>
           </div>
