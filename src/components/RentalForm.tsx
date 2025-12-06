@@ -44,7 +44,9 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
     }
   }, [startDate, endDate, product?.pricePerDay]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!privacyAccepted) {
       toast({
@@ -301,7 +303,9 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
               <a
                 href="/datenschutz"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-foreground underline"
+                onClick={(e) => e.stopPropagation()}
               >
                 Datenschutzerklärung
               </a>{" "}
