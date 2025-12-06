@@ -44,9 +44,8 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
     }
   }, [startDate, endDate, product?.pricePerDay]);
 
-  const handleSubmit = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleSubmit = async () => {
+    console.log("=== RENTAL FORM SUBMIT STARTED ===");
 
     if (!privacyAccepted) {
       toast({
@@ -318,7 +317,11 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
             type="button"
             className="w-full"
             disabled={isSubmitting || !privacyAccepted || totalDays <= 0}
-            onClick={handleSubmit}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit();
+            }}
           >
             {isSubmitting ? (
               <>
