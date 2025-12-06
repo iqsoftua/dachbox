@@ -98,7 +98,7 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
         return;
       }
 
-      // Send email notification
+      // Send email notification using direct fetch
       console.log("=== CALLING EDGE FUNCTION ===");
       const notificationData = {
         type: "rental" as const,
@@ -113,17 +113,21 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
         totalPrice,
       };
       
-      const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
-        body: notificationData,
-      });
-      
-      console.log("=== EMAIL RESULT ===", { data, fnError });
-      
-      if (fnError) {
-        console.error("Edge function error:", fnError);
-        alert("Email Fehler: " + JSON.stringify(fnError));
-      } else {
-        alert("Email gesendet! " + JSON.stringify(data));
+      try {
+        const response = await fetch(
+          "https://jwuezvrdhkeysrbzfiga.supabase.co/functions/v1/send-notification",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(notificationData),
+          }
+        );
+        const result = await response.json();
+        console.log("=== EMAIL RESULT ===", result);
+      } catch (emailErr) {
+        console.error("Email send error:", emailErr);
       }
 
       toast({
