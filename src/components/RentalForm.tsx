@@ -44,8 +44,9 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
     }
   }, [startDate, endDate, product?.pricePerDay]);
 
-  const handleSubmit = async () => {
+  const submitForm = async () => {
     console.log("=== RENTAL FORM SUBMIT STARTED ===");
+    alert("Form submit gestartet!");
 
     if (!privacyAccepted) {
       toast({
@@ -70,6 +71,7 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
     setIsSubmitting(true);
 
     try {
+      // Save to database
       const { error } = await supabase.from("rental_requests").insert({
         product_id: product.id,
         product_name: product.name,
@@ -92,46 +94,43 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
           description: "Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
           variant: "destructive",
         });
-      } else {
-        // Send email notification
-        console.log("=== RENTAL INSERT SUCCESS, CALLING EDGE FUNCTION ===");
-        alert("Daten gespeichert! Edge function wird aufgerufen...");
-        try {
-          const notificationData = {
-            type: "rental" as const,
-            firstName,
-            lastName,
-            email,
-            phone,
-            productName: product.name,
-            startDate,
-            endDate,
-            days: totalDays,
-            totalPrice,
-          };
-          console.log("Calling send-notification with:", notificationData);
-          const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
-            body: notificationData,
-          });
-          console.log("=== EMAIL RESULT ===", { data, fnError });
-          if (fnError) {
-            console.error("Edge function error:", fnError);
-            alert("Edge function Fehler: " + JSON.stringify(fnError));
-          } else {
-            alert("Email erfolgreich gesendet! ID: " + JSON.stringify(data));
-          }
-        } catch (err: any) {
-          console.error("Email notification error:", err);
-          alert("Catch Error: " + (err?.message || err));
-        }
-
-        toast({
-          title: "Vielen Dank!",
-          description:
-            "Wir bearbeiten Ihre Anfrage und melden uns in Kürze bei Ihnen.",
-        });
-        onClose();
+        setIsSubmitting(false);
+        return;
       }
+
+      // Send email notification
+      console.log("=== CALLING EDGE FUNCTION ===");
+      const notificationData = {
+        type: "rental" as const,
+        firstName,
+        lastName,
+        email,
+        phone,
+        productName: product.name,
+        startDate,
+        endDate,
+        days: totalDays,
+        totalPrice,
+      };
+      
+      const { data, error: fnError } = await supabase.functions.invoke("send-notification", {
+        body: notificationData,
+      });
+      
+      console.log("=== EMAIL RESULT ===", { data, fnError });
+      
+      if (fnError) {
+        console.error("Edge function error:", fnError);
+        alert("Email Fehler: " + JSON.stringify(fnError));
+      } else {
+        alert("Email gesendet! " + JSON.stringify(data));
+      }
+
+      toast({
+        title: "Vielen Dank!",
+        description: "Wir bearbeiten Ihre Anfrage und melden uns in Kürze bei Ihnen.",
+      });
+      onClose();
     } catch (error) {
       console.error("Error:", error);
       toast({
@@ -317,11 +316,7 @@ const RentalForm = ({ product, onClose }: RentalFormProps) => {
             type="button"
             className="w-full"
             disabled={isSubmitting || !privacyAccepted || totalDays <= 0}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleSubmit();
-            }}
+            onClick={() => submitForm()}
           >
             {isSubmitting ? (
               <>
