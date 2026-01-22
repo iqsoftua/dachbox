@@ -5,6 +5,16 @@ import { supabase } from '@/integrations/supabase/client';
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  /**
+   * IMPORTANT: This isAdmin flag is for UI display purposes ONLY.
+   * 
+   * SECURITY NOTE: Client-side admin checks can be manipulated by attackers.
+   * ALL actual security is enforced server-side via Row-Level Security (RLS) policies
+   * using the has_role() function. Never rely on this flag for access control decisions.
+   * 
+   * The RLS policies in the database are the authoritative source for authorization.
+   * This client-side state is only used to conditionally render admin UI elements.
+   */
   isAdmin: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -17,6 +27,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  // NOTE: isAdmin is ONLY for UI rendering. RLS policies provide actual security.
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,6 +63,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  /**
+   * Checks if the user has admin role for UI purposes.
+   * 
+   * SECURITY NOTE: This is NOT a security check. The actual authorization
+   * is enforced via RLS policies on the database. This function only
+   * determines whether to show admin UI elements to the user.
+   * 
+   * Even if this check is bypassed client-side, database operations
+   * will fail due to RLS policies using has_role(auth.uid(), 'admin').
+   */
   const checkAdminRole = async (userId: string) => {
     const { data, error } = await supabase
       .from('user_roles')
